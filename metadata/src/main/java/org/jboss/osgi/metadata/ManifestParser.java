@@ -23,7 +23,7 @@
 // This class is based on some original classes from
 // Apache Felix which is licensed as below
 
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -54,50 +54,50 @@ import org.jboss.osgi.metadata.internal.AbstractParameterizedAttribute;
 
 /**
  * ManifestParser.
- * 
+ *
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @version $Revision: 1.1 $
+ * @author <a href="david@redhat.com">David Bosschaert</a>
  */
 public class ManifestParser {
     /**
      * Parse packages
-     * 
+     *
      * @param header the header
      * @param list the list of packages to create
      */
     public static void parsePackages(String header, List<PackageAttribute> list) {
-        parse(header, list, true);
+        parse(header, list, true, false);
     }
 
     /**
      * Parse parameters
-     * 
+     *
      * @param header the header
      * @param list the list of parameters to create
      */
     public static void parseParameters(String header, List<ParameterizedAttribute> list) {
-        parse(header, list, false);
+        parse(header, list, false, false);
     }
 
     /**
      * Parse paths
-     * 
+     *
      * @param header the header
      * @param list the list of paths to create
      */
     public static void parsePaths(String header, List<ParameterizedAttribute> list) {
-        parse(header, list, false);
+        parse(header, list, false, false);
     }
 
     /**
      * Parse a header
-     * 
+     *
      * @param header the header
      * @param list the list to create
      * @param packages whether to create packages
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static void parse(String header, List list, boolean packages) {
+    public static void parse(String header, List list, boolean packages, boolean allowDuplicateAttributesOrDirectives) {
         if (header == null)
             return;
         if (header.length() == 0)
@@ -136,9 +136,16 @@ public class ManifestParser {
                     if (directives == null)
                         directives = new HashMap<String, Parameter>();
                     String unquoted = unquote(name);
-                    if (directives.containsKey(unquoted))
-                        throw new IllegalStateException("Dupicate directive: " + unquoted);
-                    directives.put(unquoted, new AbstractParameter(unquote(value)));
+                    Parameter directive = directives.get(unquoted);
+                    if (directive != null) {
+                        if (!allowDuplicateAttributesOrDirectives) {
+                            throw new IllegalStateException("Duplicate directive: " + unquoted);
+                        }
+                    } else {
+                        directive = new AbstractParameter();
+                        directives.put(unquoted, directive);
+                    }
+                    directive.addValue(unquote(value));
                 } else {
                     seperator = piece.indexOf("=");
                     if (seperator >= 0) {
@@ -147,9 +154,16 @@ public class ManifestParser {
                         if (attributes == null)
                             attributes = new HashMap<String, Parameter>();
                         String unquoted = unquote(name);
-                        if (attributes.containsKey(unquoted))
-                            throw new IllegalStateException("Dupicate attribute: " + unquoted);
-                        attributes.put(unquoted, new AbstractParameter(unquote(value)));
+                        Parameter attribute = attributes.get(unquoted);
+                        if (attribute != null) {
+                            if (!allowDuplicateAttributesOrDirectives) {
+                                throw new IllegalStateException("Duplicate attribute: " + unquoted);
+                            }
+                        } else {
+                            attribute = new AbstractParameter();
+                            attributes.put(unquoted, attribute);
+                        }
+                        attribute.addValue(unquote(value));
                     } else {
                         throw new IllegalArgumentException("Path " + piece + " should appear before attributes and directives in " + clause);
                     }
@@ -165,13 +179,12 @@ public class ManifestParser {
 
                 list.add(metadata);
             }
-
         }
     }
 
     /**
      * Remove around quotes around a string
-     * 
+     *
      * @param string the string
      * @return the unquoted string
      */
@@ -187,7 +200,7 @@ public class ManifestParser {
      * Parses delimited string and returns an array containing the tokens. This parser obeys quotes, so the delimiter character
      * will be ignored if it is inside of a quote. This method assumes that the quote character is not included in the set of
      * delimiter characters.
-     * 
+     *
      * @param value the delimited string to parse.
      * @param delim the characters delimiting the tokens.
      * @return an array of string tokens or null if there were no tokens.

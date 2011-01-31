@@ -23,7 +23,7 @@ package org.jboss.osgi.metadata.internal;
 
 /**
  * ValueCreator holder.
- * 
+ *
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  */
 public class ValueCreatorUtil {
@@ -36,7 +36,7 @@ public class ValueCreatorUtil {
     public static StringListValueCreator STRING_LIST_VC = new StringListValueCreator();
     public static ParameterizedAttributeValueCreator PARAM_ATTRIB_VC = new ParameterizedAttributeValueCreator();
     public static ParameterizedAttributeListValueCreator QNAME_ATTRIB_LIST_VC = new QNameAttributeListValueCreator();
-    public static ParameterizedAttributeListValueCreator PATH_ATTRIB_LIST_VC = new PathAttributeListValueCreator();
+    public static ParameterizedAttributeListValueCreator NATIVE_CODE_ATTRIB_LIST_VC = new NativeCodeAttributeListValueCreator();
     public static PackageAttributeListValueCreator PACKAGE_LIST_VC = new PackageAttributeListValueCreator();
     public static ActivationPolicyMDValueCreator ACTIVATION_POLICY_VC = new ActivationPolicyMDValueCreator();
 }
