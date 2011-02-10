@@ -30,9 +30,9 @@ import java.util.List;
 
 /**
  * Meta data for native code libraries as defined by OSGi R4V42.
- * 
+ *
  * 3.9 Loading Native Code Libraries http://www.osgi.org/Download/File?url=/download/r4v42/r4.core.pdf
- * 
+ *
  * @author thomas.diesler@jboss.com
  * @version $Revision$
  * @since 21-Jan-2010
@@ -47,12 +47,11 @@ public class NativeLibrary implements Serializable {
     private List<String> processors = new ArrayList<String>();
     private List<VersionRange> osVersions = new ArrayList<VersionRange>();
     private List<String> languages = new ArrayList<String>();
-    private String selectionFilter;
     private boolean optional;
 
     /**
      * Create a NativeCode instance with mandatory properties.
-     * 
+     *
      * @param osNames The set of OS names
      * @param libraryPath The library path
      * @param librarySource An interface from which to retrieve the actual library location
@@ -104,14 +103,6 @@ public class NativeLibrary implements Serializable {
 
     public List<String> getLanguages() {
         return Collections.unmodifiableList(languages);
-    }
-
-    public String getSelectionFilter() {
-        return selectionFilter;
-    }
-
-    public void setSelectionFilter(String selectionFilter) {
-        this.selectionFilter = selectionFilter;
     }
 
     public boolean isOptional() {
