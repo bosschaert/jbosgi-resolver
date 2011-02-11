@@ -71,9 +71,10 @@ import org.osgi.framework.Version;
 
 /**
  * Abstract OSGi meta data.
- *
+ * 
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
  * @author Thomas.Diesler@jboss.com
+ * @author David Bosschaert
  */
 public abstract class AbstractOSGiMetaData implements OSGiMetaData {
     private static final long serialVersionUID = 1L;

@@ -23,8 +23,9 @@ package org.jboss.osgi.metadata.internal;
 
 /**
  * ValueCreator holder.
- *
+ * 
  * @author <a href="mailto:ales.justin@jboss.com">Ales Justin</a>
+ * @author David Bosschaert
  */
 public class ValueCreatorUtil {
     public static StringValueCreator STRING_VC = new StringValueCreator();

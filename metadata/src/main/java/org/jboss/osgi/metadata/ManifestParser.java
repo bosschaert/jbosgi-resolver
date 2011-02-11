@@ -56,7 +56,7 @@ import org.jboss.osgi.metadata.internal.AbstractParameterizedAttribute;
  * ManifestParser.
  *
  * @author <a href="adrian@jboss.com">Adrian Brock</a>
- * @author <a href="david@redhat.com">David Bosschaert</a>
+ * @author David Bosschaert
  */
 public class ManifestParser {
     /**
@@ -97,7 +97,7 @@ public class ManifestParser {
      * @param packages whether to create packages
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static void parse(String header, List list, boolean packages, boolean allowDuplicateAttributesOrDirectives) {
+    public static void parse(String header, List list, boolean packages, boolean allowDuplicateAttributes) {
         if (header == null)
             return;
         if (header.length() == 0)
@@ -136,16 +136,9 @@ public class ManifestParser {
                     if (directives == null)
                         directives = new HashMap<String, Parameter>();
                     String unquoted = unquote(name);
-                    Parameter directive = directives.get(unquoted);
-                    if (directive != null) {
-                        if (!allowDuplicateAttributesOrDirectives) {
-                            throw new IllegalStateException("Duplicate directive: " + unquoted);
-                        }
-                    } else {
-                        directive = new AbstractParameter();
-                        directives.put(unquoted, directive);
-                    }
-                    directive.addValue(unquote(value));
+                    if (directives.containsKey(unquoted))
+                        throw new IllegalStateException("Dupicate directive: " + unquoted);
+                    directives.put(unquoted, new AbstractParameter(unquote(value)));
                 } else {
                     seperator = piece.indexOf("=");
                     if (seperator >= 0) {
@@ -156,7 +149,7 @@ public class ManifestParser {
                         String unquoted = unquote(name);
                         Parameter attribute = attributes.get(unquoted);
                         if (attribute != null) {
-                            if (!allowDuplicateAttributesOrDirectives) {
+                            if (!allowDuplicateAttributes) {
                                 throw new IllegalStateException("Duplicate attribute: " + unquoted);
                             }
                         } else {

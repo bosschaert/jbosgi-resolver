@@ -27,7 +27,7 @@ import org.jboss.osgi.metadata.ParameterizedAttribute;
  * Create path attribute list from string attribute for Native Code manifest header. The Native Code header is specific in that it
  * allows duplicate attributes.
  *
- * @author <a href="david@redhat.com">David Bosschaert</a>
+ * @author David Bosschaert
  */
 public class NativeCodeAttributeListValueCreator extends ParameterizedAttributeListValueCreator {
     @Override
